@@ -13,7 +13,7 @@ import javax.sql.DataSource;
 @Configuration
 public class BatchPrimaryDataSource {
 
-    @Primary
+
     @Bean
     @ConfigurationProperties("spring.datasource.batch")
     public DataSourceProperties batchDataSourceProperties() {
@@ -22,7 +22,7 @@ public class BatchPrimaryDataSource {
 
 
 
-    @Primary
+
     @Bean(name = "batchDataSource")
     public DataSource batchDataSource() {
         return batchDataSourceProperties().initializeDataSourceBuilder().build();

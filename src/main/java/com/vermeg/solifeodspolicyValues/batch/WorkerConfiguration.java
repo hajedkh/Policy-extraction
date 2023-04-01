@@ -1,7 +1,7 @@
 package com.vermeg.solifeodspolicyValues.batch;
 
-import com.vermeg.solifeodspolicyValues.models.Policy;
-import com.vermeg.solifeodspolicyValues.models.PolicyActuarialValue;
+import com.vermeg.solifeodspolicyValues.dtos.Policy;
+import com.vermeg.solifeodspolicyValues.dtos.PolicyActuarialValue;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.springframework.batch.integration.chunk.RemoteChunkingWorkerBuilder;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
@@ -32,26 +32,26 @@ public class WorkerConfiguration {
 
 
     @Bean
-    public DirectChannel requests() {
+    public DirectChannel workerRequests() {
         return new DirectChannel();
     }
 
     @Bean
-    public DirectChannel replies() {
+    public DirectChannel workerReplies() {
         return new DirectChannel();
     }
 
 
     @Bean
-    public IntegrationFlow inboundFlow(ActiveMQConnectionFactory connectionFactory) {
+    public IntegrationFlow inboundFlowWorker(ActiveMQConnectionFactory connectionFactory) {
         return IntegrationFlows.from(Jms.messageDrivenChannelAdapter(connectionFactory).destination("requests"))
-                .channel(requests()).get();
+                .channel(workerRequests()).get();
     }
 
 
     @Bean
-    public IntegrationFlow outboundFlow(ActiveMQConnectionFactory connectionFactory) {
-        return IntegrationFlows.from(replies()).handle(Jms.outboundAdapter(connectionFactory).destination("replies"))
+    public IntegrationFlow outBoundFlowWorker(ActiveMQConnectionFactory connectionFactory) {
+        return IntegrationFlows.from(workerReplies()).handle(Jms.outboundAdapter(connectionFactory).destination("replies"))
                 .get();
     }
 
@@ -63,8 +63,11 @@ public class WorkerConfiguration {
 
     @Bean
     public IntegrationFlow workerIntegrationFlow() {
-        return this.remoteChunkingWorkerBuilder.itemProcessor(simplePolicyProcessor()).itemWriter(writer(odsDatasource))
-                .inputChannel(requests()).outputChannel(replies()).build();
+        return this.remoteChunkingWorkerBuilder.itemProcessor(simplePolicyProcessor())
+                .itemWriter(writer(odsDatasource))
+                .inputChannel(workerRequests())
+                .outputChannel(workerReplies())
+                .build();
     }
 
 

@@ -1,4 +1,4 @@
-package com.vermeg.solifeodspolicyValues.models;
+package com.vermeg.solifeodspolicyValues.dtos;
 
 
 import lombok.*;
@@ -15,9 +15,15 @@ import java.io.Serializable;
 public class PolicyActuarialValue implements Serializable {
 
     @Id
-    private String id;
+    private Long id;
 
 
-    private int value;
+    private double totalPaiedPremiums;
+
+    private double  benifitsFromInvestment;
+
+    private double totalFeesValue;
+
+    private double surrenderValue;
 
 }
