@@ -1,13 +1,13 @@
 package com.vermeg.solifeodspolicyValues.batch;
 
-import com.vermeg.solifeodspolicyValues.models.Policy;
+import com.vermeg.solifeodspolicyValues.dtos.Policy;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.step.tasklet.TaskletStep;
 import org.springframework.batch.integration.chunk.RemoteChunkingManagerStepBuilderFactory;
+import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
 import org.springframework.batch.item.database.builder.JdbcCursorItemReaderBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +55,9 @@ public  class MasterConfiguration {
 
     @Bean
     public IntegrationFlow outboundFlow(ActiveMQConnectionFactory connectionFactory) {
-        return IntegrationFlows.from(requests()).log().handle(Jms.outboundAdapter(connectionFactory).destination("requests"))
+        return IntegrationFlows.from(requests())
+                .log()
+                .handle(Jms.outboundAdapter(connectionFactory).destination("requests"))
                 .get();
     }
 
@@ -64,8 +66,10 @@ public  class MasterConfiguration {
     @Bean
     public IntegrationFlow inboundFlow(ActiveMQConnectionFactory connectionFactory) {
         return IntegrationFlows.from(Jms.messageDrivenChannelAdapter(connectionFactory).destination("replies"))
-                .channel(replies()).get();
+                .channel(replies())
+                .get();
     }
+
 
 
     @Bean
@@ -76,7 +80,7 @@ public  class MasterConfiguration {
                 .sql("SELECT ID,VALUE FROM \"POLICY\"")
                 .rowMapper((rs, rowNum) -> {
                     Policy policy = new Policy();
-                    policy.setId(rs.getString(1));
+                    policy.setId(Long.valueOf(rs.getString(1)));
                     policy.setValue(rs.getString(2));
                     return policy;
                 })
@@ -93,9 +97,10 @@ public  class MasterConfiguration {
     }
 
     @Bean
-    public Job remoteChunkingJob() {
+    public Job remoteChunkingJob(JobCompletionNotificationListener listener) {
         return this.jobBuilderFactory.get("remoteChunkingJob")
                 .incrementer(new RunIdIncrementer())
+                .listener(listener)
                 .start(step1())
                 .build();
     }

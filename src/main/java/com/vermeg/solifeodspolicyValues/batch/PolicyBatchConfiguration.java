@@ -1,13 +1,14 @@
 package com.vermeg.solifeodspolicyValues.batch;
 
 
-import com.vermeg.solifeodspolicyValues.models.Policy;
-import com.vermeg.solifeodspolicyValues.models.PolicyActuarialValue;
+import com.vermeg.solifeodspolicyValues.dtos.Policy;
+import com.vermeg.solifeodspolicyValues.dtos.PolicyActuarialValue;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.configuration.annotation.*;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.repository.support.JobRepositoryFactoryBean;
+import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
@@ -73,7 +74,7 @@ public class PolicyBatchConfiguration {
                 .sql("SELECT ID,VALUE FROM \"POLICY\"")
                 .rowMapper((rs, rowNum) -> {
                     Policy policy = new Policy();
-                    policy.setId(rs.getString(1));
+                    policy.setId(Long.valueOf(rs.getString(1)));
                     policy.setValue(rs.getString(2));
                     return policy;
                 })

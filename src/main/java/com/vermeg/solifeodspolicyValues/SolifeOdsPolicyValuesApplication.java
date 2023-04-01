@@ -5,6 +5,7 @@ import org.springframework.batch.integration.config.annotation.EnableBatchIntegr
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.integration.config.EnableIntegration;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 
 @SpringBootApplication
