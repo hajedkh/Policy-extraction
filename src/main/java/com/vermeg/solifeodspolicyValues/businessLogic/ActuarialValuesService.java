@@ -28,7 +28,7 @@ public class ActuarialValuesService {
     }
 
     public double getSurrenderValue(Policy policy){
-        return
+        return Double.parseDouble("0");
     }
 
 

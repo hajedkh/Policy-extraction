@@ -1,0 +1,24 @@
+version: "3.9"
+services:
+  odsext:
+    image: "odsext"
+    env_file:
+      - ods.env
+    depends_on:
+      - db
+    ports:
+      - "8080:8080"
+  activemq:
+    image: "rmohr/activemq"
+    ports:
+      - "8161:8161"
+      - "61616:61616"
+  db:
+    image: postgres:13.2
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: solife
+    ports:
+      - "5432:5432"
