@@ -11,6 +11,12 @@ public class PolicyItemProcessor implements ItemProcessor<Policy, PolicyActuaria
     @Override
     public PolicyActuarialValue process(Policy item) throws Exception {
         Random rd = new Random();
-        return new PolicyActuarialValue(item.getId(),  54);
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            System.out.println("interruption");
+        }
+        return new PolicyActuarialValue(item.getId()+rd.nextLong(),  Double.parseDouble("22"),  Double.parseDouble("22"),
+                Double.parseDouble("22"),  Double.parseDouble("22"));
     }
 }

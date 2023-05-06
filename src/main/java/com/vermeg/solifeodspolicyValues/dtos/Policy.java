@@ -16,7 +16,6 @@ import java.util.List;
 public class Policy implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "policy_sequence2")
     private  Long id;
 
 

@@ -77,7 +77,7 @@ public  class MasterConfiguration {
         return new JdbcCursorItemReaderBuilder<Policy>()
                 .dataSource(solifeDataSource)
                 .name("policyItemReader")
-                .sql("SELECT ID,VALUE FROM \"POLICY\"")
+                .sql("SELECT ID,VALUE FROM POLICY")
                 .rowMapper((rs, rowNum) -> {
                     Policy policy = new Policy();
                     policy.setId(Long.valueOf(rs.getString(1)));

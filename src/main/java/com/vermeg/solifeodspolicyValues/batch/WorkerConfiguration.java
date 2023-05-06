@@ -76,7 +76,9 @@ public class WorkerConfiguration {
         return new JdbcBatchItemWriterBuilder<PolicyActuarialValue>()
                 .dataSource(dataSource)
                 .beanMapped()
-                .sql("INSERT INTO policy_actuarial_value (id, value) VALUES (:id, :value)")
+                .sql("INSERT INTO policy_actuarial_value (id, TOTAL_PAIED_PREMIUMS,BENIFITS_FROM_INVESTMENT,TOTAL_FEES_VALUE," +
+                        "SURRENDER_VALUE) VALUES (:id, :totalPaiedPremiums, :benifitsFromInvestment, :totalFeesValue," +
+                        ":surrenderValue)")
                 .build();
     }
 }

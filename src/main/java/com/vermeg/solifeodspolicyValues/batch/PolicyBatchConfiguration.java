@@ -71,7 +71,7 @@ public class PolicyBatchConfiguration {
         return new JdbcCursorItemReaderBuilder<Policy>()
                 .dataSource(solifeDataSource)
                 .name("policyItemReader")
-                .sql("SELECT ID,VALUE FROM \"POLICY\"")
+                .sql("SELECT ID,VALUE FROM POLICY")
                 .rowMapper((rs, rowNum) -> {
                     Policy policy = new Policy();
                     policy.setId(Long.valueOf(rs.getString(1)));
@@ -86,7 +86,9 @@ public class PolicyBatchConfiguration {
     public JdbcBatchItemWriter<PolicyActuarialValue> writer() {
         return new JdbcBatchItemWriterBuilder<PolicyActuarialValue>()
                 .itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
-                .sql("INSERT INTO policy_actuarial_value (id, value) VALUES (:id, :value)")
+                .sql("INSERT INTO policy_actuarial_value (id, TOTAL_PAIED_PREMIUMS,BENIFITS_FROM_INVESTMENT,TOTAL_FEES_VALUE," +
+                        "SURRENDER_VALUE) VALUES (:id, :totalPaiedPremiums, :benifitsFromInvestment, :totalFeesValue," +
+                        ":surrenderValue)")
                 .dataSource(odsDatasource)
                 .build();
     }

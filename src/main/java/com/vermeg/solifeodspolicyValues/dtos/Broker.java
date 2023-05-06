@@ -27,7 +27,7 @@ public class Broker {
 
     private String Address;
 
-    private int phoneNumber;
+    private String phoneNumber;
 
     private String email;
 
