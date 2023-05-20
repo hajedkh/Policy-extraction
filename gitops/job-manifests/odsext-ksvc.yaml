@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: odsext-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: odsext-worker
+  template:
+    metadata:
+      labels:
+        app: odsext-worker
+      annotations:
+        autoscaling.knative.dev/minScale: "1"
+        autoscaling.knative.dev/maxScale: "10"
+    spec:
+      containers:
+        - name: odsext
+          image: hajedkh/odsext:cpu
+          env:
+            - name: SOLIFEDB_URL
+              value: jdbc:postgresql://postgres:5432/solife
+            - name: SOLIFEDB_USER
+              value: admin
+            - name: SOLIFEDB_PWD
+              value: admin
+            - name: SOLIFE_DB_DRIER_CLASS
+              value: org.postgresql.Driver
+            - name: ODSDB_URL
+              value: jdbc:postgresql://postgres:5432/solife
+            - name: ODSDB_USER
+              value: admin
+            - name: ODSDB_PWD
+              value: admin
+            - name: BATCHDB_URL
+              value: jdbc:postgresql://postgres:5432/solife
+            - name: BATCHDB_USER
+              value: admin
+            - name: BATCHDB_PASSWORD
+              value: admin
+            - name: ACTIVEMQ_URL
+              value: tcp://activemq-internal:61616
+            - name: ACTIVE_PROFILE
+              value: worker
+            - name: DB_AUTO_DDL
+              value: none
+          ports:
+            - containerPort: 8080

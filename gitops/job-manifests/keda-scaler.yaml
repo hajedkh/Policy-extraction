@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: activemq-secret
+type: Opaque
+data:
+  activemq-password: YWRtaW4=
+  activemq-username: YWRtaW4=
+---
+apiVersion: keda.sh/v1alpha1
+kind: TriggerAuthentication
+metadata:
+  name: trigger-auth-activemq
+spec:
+  secretTargetRef:
+    - parameter: username
+      name: activemq-secret
+      key: activemq-username
+    - parameter: password
+      name: activemq-secret
+      key: activemq-password
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: activemq-scaledobject
+spec:
+  scaleTargetRef:
+    name: odsext-worker
+  triggers:
+    - type: activemq
+      metadata:
+        managementEndpoint: "activemq.default.20.101.183.169.sslip.io"
+        destinationName: "requests"
+        brokerName: "localhost"
+        targetQueueSize: "2"
+      authenticationRef:
+        name: trigger-auth-activemq
