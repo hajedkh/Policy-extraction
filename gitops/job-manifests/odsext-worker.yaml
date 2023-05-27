@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
         - name: odsext
-          image: hajedkh/odsext:full-pipe-run-r-7wxpr
+          image: hajedkh/odsext:full-pipe-run-r-lsknw
           env:
             - name: SOLIFEDB_URL
               value: jdbc:postgresql://postgres:5432/solife
