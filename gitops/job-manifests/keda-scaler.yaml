@@ -30,7 +30,7 @@ spec:
   triggers:
     - type: activemq
       metadata:
-        managementEndpoint: "activemq.default.20.4.142.96.sslip.io"
+        managementEndpoint: "activemq.default.20.23.89.192.sslip.io"
         destinationName: "requests"
         brokerName: "localhost"
         targetQueueSize: "2"
